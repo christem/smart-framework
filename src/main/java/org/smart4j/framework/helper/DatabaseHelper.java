@@ -29,7 +29,7 @@ import org.smart4j.framework.util.CollectionUtil;
 
 /**
  * 数据库操作助手类
- *
+ *  推荐使用连接池来管理数据库连接，此例仅为ThreadLocal使用方法参考
  * @author huangyong
  * @since 1.0.0
  */
@@ -37,6 +37,8 @@ public final class DatabaseHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseHelper.class);
 
+    //通过ThreadLocal存放JDBC Connection，以达到事务控制的能力
+    //每个线程都拥有自己的连接，而不是共享同一个连接，否则 线程1 有可能会关闭 线程2 的连接 导致线程2报错
     private static final ThreadLocal<Connection> CONNECTION_HOLDER;
 
     private static final QueryRunner QUERY_RUNNER;
@@ -70,6 +72,8 @@ public final class DatabaseHelper {
         if (conn == null) {
             try {
                 conn = DATA_SOURCE.getConnection();
+                //获取数据库默认的隔离级别
+                 int transactionIsolation = conn.getMetaData().getDefaultTransactionIsolation();
             } catch (SQLException e) {
                 LOGGER.error("get connection failure", e);
                 throw new RuntimeException(e);

@@ -12,14 +12,19 @@ import net.sf.cglib.proxy.MethodProxy;
  * @since 1.0.0
  */
 public class ProxyChain {
-
+    //目标类
     private final Class<?> targetClass;
+    //目标对象
     private final Object targetObject;
+    //目标方法
     private final Method targetMethod;
+    //方法代理
     private final MethodProxy methodProxy;
+    //方法参数
     private final Object[] methodParams;
-
+    //代理列表
     private List<Proxy> proxyList = new ArrayList<Proxy>();
+    //代理索引
     private int proxyIndex = 0;
 
     public ProxyChain(Class<?> targetClass, Object targetObject, Method targetMethod, MethodProxy methodProxy, Object[] methodParams, List<Proxy> proxyList) {
@@ -46,8 +51,10 @@ public class ProxyChain {
     public Object doProxyChain() throws Throwable {
         Object methodResult;
         if (proxyIndex < proxyList.size()) {
+            //调用代理链
             methodResult = proxyList.get(proxyIndex++).doProxy(this);
         } else {
+            //调用业务逻辑
             methodResult = methodProxy.invokeSuper(targetObject, methodParams);
         }
         return methodResult;

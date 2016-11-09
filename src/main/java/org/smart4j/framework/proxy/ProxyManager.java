@@ -14,8 +14,15 @@ import net.sf.cglib.proxy.MethodProxy;
  */
 public class ProxyManager {
 
-    @SuppressWarnings("unchecked")
+    /**
+     *  提供创建代理对象的方法
+     *
+     * @param targetClass 目标类
+     * @param proxyList 代理接口
+     * @return 代理对象
+     */
     public static <T> T createProxy(final Class<?> targetClass, final List<Proxy> proxyList) {
+        //使用cglib提供的Enhancer.create方法来创建代理对象
         return (T) Enhancer.create(targetClass, new MethodInterceptor() {
             @Override
             public Object intercept(Object targetObject, Method targetMethod, Object[] methodParams, MethodProxy methodProxy) throws Throwable {

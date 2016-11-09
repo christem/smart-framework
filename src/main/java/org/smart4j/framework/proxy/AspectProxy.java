@@ -18,6 +18,7 @@ public abstract class AspectProxy implements Proxy {
     public final Object doProxy(ProxyChain proxyChain) throws Throwable {
         Object result = null;
 
+        //获取目标类、方法、方法参数
         Class<?> cls = proxyChain.getTargetClass();
         Method method = proxyChain.getTargetMethod();
         Object[] params = proxyChain.getMethodParams();

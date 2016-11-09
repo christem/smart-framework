@@ -28,7 +28,9 @@ public final class AopHelper {
 
     static {
         try {
+            //获取代理类与目标类集合之间的关系
             Map<Class<?>, Set<Class<?>>> proxyMap = createProxyMap();
+            //根据proxyMap关系分析出目标类与代理对象列表之间的映射关系
             Map<Class<?>, List<Proxy>> targetMap = createTargetMap(proxyMap);
             for (Map.Entry<Class<?>, List<Proxy>> targetEntry : targetMap.entrySet()) {
                 Class<?> targetClass = targetEntry.getKey();
@@ -49,10 +51,14 @@ public final class AopHelper {
     }
 
     private static void addAspectProxy(Map<Class<?>, Set<Class<?>>> proxyMap) throws Exception {
+        //获取应用包名下某父类（或接口）的所有子类（或实现类）
         Set<Class<?>> proxyClassSet = ClassHelper.getClassSetBySuper(AspectProxy.class);
         for (Class<?> proxyClass : proxyClassSet) {
+            //isAnnotationPresent如果一个注解指定类型是存在于此元素上方法返回true，
+            // 否则返回false。这种方法主要是为了便于访问标记注释而设计。
             if (proxyClass.isAnnotationPresent(Aspect.class)) {
                 Aspect aspect = proxyClass.getAnnotation(Aspect.class);
+                //获取代理类与目标类集合之间的关系
                 Set<Class<?>> targetClassSet = createTargetClassSet(aspect);
                 proxyMap.put(proxyClass, targetClassSet);
             }
@@ -68,6 +74,7 @@ public final class AopHelper {
         Set<Class<?>> targetClassSet = new HashSet<Class<?>>();
         Class<? extends Annotation> annotation = aspect.value();
         if (annotation != null && !annotation.equals(Aspect.class)) {
+            //获取应用包名下带有某注解的所有类
             targetClassSet.addAll(ClassHelper.getClassSetByAnnotation(annotation));
         }
         return targetClassSet;

@@ -65,6 +65,7 @@ public final class ClassUtil {
                         String packagePath = url.getPath().replaceAll("%20", " ");
                         addClass(classSet, packagePath, packageName);
                     } else if (protocol.equals("jar")) {
+                        //加载jar包下的class
                         JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
                         if (jarURLConnection != null) {
                             JarFile jarFile = jarURLConnection.getJarFile();
@@ -91,20 +92,25 @@ public final class ClassUtil {
     }
 
     private static void addClass(Set<Class<?>> classSet, String packagePath, String packageName) {
+        //获取路径下所有的class文件或目录
         File[] files = new File(packagePath).listFiles(new FileFilter() {
             public boolean accept(File file) {
                 return (file.isFile() && file.getName().endsWith(".class")) || file.isDirectory();
             }
         });
+
         for (File file : files) {
             String fileName = file.getName();
+            //如果是class文件
             if (file.isFile()) {
                 String className = fileName.substring(0, fileName.lastIndexOf("."));
                 if (StringUtil.isNotEmpty(packageName)) {
                     className = packageName + "." + className;
                 }
+                //加载类
                 doAddClass(classSet, className);
             } else {
+                //如果是目录
                 String subPackagePath = fileName;
                 if (StringUtil.isNotEmpty(packagePath)) {
                     subPackagePath = packagePath + "/" + subPackagePath;
@@ -113,6 +119,7 @@ public final class ClassUtil {
                 if (StringUtil.isNotEmpty(packageName)) {
                     subPackageName = packageName + "." + subPackageName;
                 }
+                //递归加载目录下的文件
                 addClass(classSet, subPackagePath, subPackageName);
             }
         }
