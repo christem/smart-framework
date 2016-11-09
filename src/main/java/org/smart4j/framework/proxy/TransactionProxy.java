@@ -16,6 +16,7 @@ public class TransactionProxy implements Proxy {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TransactionProxy.class);
 
+    //本地线程变量，可以保证同一线程中事务控制相关逻辑只会执行一次
     private static final ThreadLocal<Boolean> FLAG_HOLDER = new ThreadLocal<Boolean>() {
         @Override
         protected Boolean initialValue() {
@@ -28,6 +29,7 @@ public class TransactionProxy implements Proxy {
         Object result;
         boolean flag = FLAG_HOLDER.get();
         Method method = proxyChain.getTargetMethod();
+        //判断方法是否带有Transaction注解
         if (!flag && method.isAnnotationPresent(Transaction.class)) {
             FLAG_HOLDER.set(true);
             try {
