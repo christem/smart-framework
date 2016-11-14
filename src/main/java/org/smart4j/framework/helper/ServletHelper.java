@@ -18,6 +18,9 @@ public final class ServletHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServletHelper.class);
 
+    /**
+     * 使每个线程独立拥有一份ServletHelper实例
+     */
     private static final ThreadLocal<ServletHelper> SERVLET_HELPER_HOLDER = new ThreadLocal<ServletHelper>();
 
     private HttpServletRequest request;

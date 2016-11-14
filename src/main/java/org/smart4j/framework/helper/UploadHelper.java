@@ -51,7 +51,7 @@ public final class UploadHelper {
     }
 
     /**
-     * 判断请求是否为 multipart 类型
+     * 判断请求是否为 multipart 类型，只有上传文件时对应的请求类型才是multipart
      */
     public static boolean isMultipart(HttpServletRequest request) {
         return ServletFileUpload.isMultipartContent(request);

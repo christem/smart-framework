@@ -9,11 +9,25 @@ import java.io.InputStream;
  * @since 1.0.0
  */
 public class FileParam {
-
+    /**
+     * 文件表单的字段名
+     */
     private String fieldName;
+    /**
+     * 上传文件的文件名
+     */
     private String fileName;
+    /**
+     * 上传文件的文件大小
+     */
     private long fileSize;
+    /**
+     * 上传文件的Content-Type，可判断文件类型
+     */
     private String contentType;
+    /**
+     * 上传文件的字节输入流
+     */
     private InputStream inputStream;
 
     public FileParam(String fieldName, String fileName, long fileSize, String contentType, InputStream inputStream) {

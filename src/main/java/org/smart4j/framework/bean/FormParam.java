@@ -8,6 +8,7 @@ package org.smart4j.framework.bean;
  */
 public class FormParam {
 
+
     private String fieldName;
     private Object fieldValue;
 
